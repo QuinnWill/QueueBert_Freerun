@@ -107,6 +107,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 Vector3 jumpVel = rb.velocity - Vector3.up * rb.velocity.y;
                 jumpVel += normal * 20f * 0.5f;
                 jumpVel += Vector3.up * 20f * 0.8f;
+                
                 jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
                 rb.velocity = jumpVel;
                 isWallRunning = false;
@@ -138,7 +139,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 Vector3 jumpVel = rb.velocity - Vector3.Dot(rb.velocity.normalized, normal) * normal * rb.velocity.magnitude;
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
-                jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
+                if (rb.velocity.sqrMagnitude > 79)
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -176,7 +178,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 Vector3 jumpVel = rb.velocity - Vector3.Dot(rb.velocity.normalized, normal) * normal * rb.velocity.magnitude;
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
-                jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
+                if(rb.velocity.sqrMagnitude > 79)
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -239,8 +242,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
         if (!grounded)
         {
-            moveDir /= 5;
-            cross /= 5;
+            moveDir /= 3;
+            cross /= 3;
         }
 
         if (horizontalVelocity.sqrMagnitude <= maxSpeed * maxSpeed)
@@ -328,9 +331,13 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
                         Debug.Log(dot < -0.8f);
                         if (dot > -0.8f)
-                            rb.velocity = Vector3.ProjectOnPlane(previousVelocity, normal);
+                        {
+                            Vector3 newVel = Vector3.ProjectOnPlane(previousVelocity, normal);
+                            newVel.y /= 1.5f;
+                            rb.velocity = newVel;
+                        }
                         else
-                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z) * 0.5f);
+                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (previousVelocity.y + ((Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 0.01f));
 
                     }
                 }
