@@ -41,16 +41,14 @@ public class HitBoxEffects : MonoBehaviour
         {
             fullCollider.enabled = true;
             Ray ray = new Ray(transform.position, Vector3.up);
-            if (fullCollider.Raycast(ray, out RaycastHit hitInfo, 10))
+            if (!Physics.Raycast(ray, 1.1f))
             {
-                Debug.Log("you shouldn't be able to stand up");
+                tryUncrouch = false;
+                crouching = false;
+                crouchCollider.enabled = false;
+                crouch.Invoke();
             }
-            else
-                Debug.Log("standup's good my guy");
-            tryUncrouch = false;
-            crouching = false;
-            crouchCollider.enabled = false;
-            crouch.Invoke();
+            
         }
     }
 
