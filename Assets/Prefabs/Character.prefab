@@ -2422,9 +2422,9 @@ MonoBehaviour:
   maxSnapSpeed: 100
   probeDistance: 1.1
   normalGravityPercentage: 1
-  sprintSpeed: 22
-  runSpeed: 12
-  crouchSpeed: 6
+  sprintSpeed: 18
+  runSpeed: 10
+  crouchSpeed: 4
   accelerationSpeed: 7000
   grounded: 0
   isSprinting: 0

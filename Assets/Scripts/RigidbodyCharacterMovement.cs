@@ -14,9 +14,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private bool jump;
     private bool cancelGrounded;
+    private bool doBoost;
 
     private float maxSpeed;
 
+    [HideInInspector]
     public int stepsSinceLastGrounded, stepsSinceLastWallRun, stepsSinceLastJump;
 
     public LayerMask layerMask;
@@ -87,6 +89,12 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     {
 
         IncrementSteps();
+
+        if (grounded && doBoost)
+        {
+            rb.AddForce(rb.velocity.normalized * 300);
+            doBoost = false;
+        }
 
         if (isCrouching)
             maxSpeed = crouchSpeed;
@@ -535,8 +543,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
         if (rb.velocity.sqrMagnitude > runSpeed * runSpeed / 2 && !isCrouching)
         {
             isSliding = true;
-            //ayo fix this infinite speed exploit (make it so that the boost only happens once you become grounded/when you are grounded
-            rb.AddForce(rb.velocity.normalized * 50);
+            doBoost = true;
         }
         isCrouching = !isCrouching;
     }
