@@ -60,11 +60,10 @@ public class AnimationManager : MonoBehaviour
         Vector3 forwardVelocity = characterMovement.RotateInput(Vector3.forward, characterMovement.isWallRunning? Vector3.up: characterMovement.normal);
         Vector3 rightVelocity = characterMovement.RotateInput(Vector3.right, characterMovement.isWallRunning ? Vector3.up : characterMovement.normal);
         horizontalVelocity = new Vector3(Vector3.Dot(rightVelocity, rb.velocity), 0, Vector3.Dot(forwardVelocity, rb.velocity));
-        Debug.DrawLine(transform.position + Vector3.up, transform.position + horizontalVelocity + Vector3.up, Color.blue);
 
         if (horizontalVelocity != Vector3.zero)
         {
-            Quaternion slerpRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(horizontalVelocity, Vector3.up), 0.3f);
+            Quaternion slerpRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(horizontalVelocity, Vector3.up), 0.1f);
             transform.localRotation = slerpRotation;
         }
     }

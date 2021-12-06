@@ -14,7 +14,6 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private bool jump;
     private bool cancelGrounded;
-    private bool tryUncrouch;
 
     private float maxSpeed;
 
@@ -86,14 +85,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.DrawLine(transform.position, transform.position + normal);
 
         IncrementSteps();
-
-        if (tryUncrouch)
-        { 
-            
-        }
 
         if (isCrouching)
             maxSpeed = crouchSpeed;
@@ -309,7 +302,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private void TryStartWallRun(Collision collision)
     {
-        if (!isSliding)
+        if (!isCrouching)
         {
             for (int i = 0; i < collision.contactCount; i++)
             {
@@ -331,14 +324,14 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                         isWallRunning = true;
                         Vector3 camForward = mainCamera.forward;
                         camForward.y = 0;
-                        dot = Vector3.Dot(camForward, normal);
-                        if (!isWallRunning)
-                        {
-                            if (dot < -0.8f)
-                                Vector3.Dot(mainCamera.forward, normal);
-                            else
-                                rb.velocity = Vector3.ProjectOnPlane(previousVelocity, normal).normalized * (previousVelocity.y + (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 2f);
-                        }
+                        dot = Vector3.Dot(camForward.normalized, normal);
+
+                        Debug.Log(dot < -0.8f);
+                        if (dot > -0.8f)
+                            rb.velocity = Vector3.ProjectOnPlane(previousVelocity, normal);
+                        else
+                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z) * 0.5f);
+
                     }
                 }
             }
@@ -477,20 +470,17 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     {
         if (stepsSinceLastWallRun != 1 || stepsSinceLastJump <= 20)
         {
-            Debug.Log("ya step is wrong dummy");
             return;
         }
 
         float speed = rb.velocity.magnitude;
         if (speed > maxSnapSpeed)
         {
-            Debug.Log("whomst fucked the speed");
             return;
         }
 
         if (!Physics.Raycast(transform.position, -previousNormal, out RaycastHit hit, probeDistance))
         {
-            Debug.Log("did not hit raycast on wall");
             return;
         }
 

@@ -2559,6 +2559,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bf161d9525d1749a0bc6b13f55a825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crouchMask:
+    serializedVersion: 2
+    m_Bits: 1
   fullCollider: {fileID: 9027893497743000403}
   crouchCollider: {fileID: 9027893497743000431}
 --- !u!1 &9027893498039749194
