@@ -226,6 +226,16 @@ public class RigidbodyCharacterMovement : MonoBehaviour
             else if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
                 rb.velocity /= 1 + 2f * Time.deltaTime;
         }
+        else
+        {
+            if (playerInput.Equals(Vector2.zero))
+            {
+                Vector3 frictionVector = rb.velocity;
+                frictionVector.x /= 1 + 1f * Time.deltaTime;
+                frictionVector.z /= 1 + 1f * Time.deltaTime;
+                rb.velocity = frictionVector;
+            }
+        }
 
         rb.AddForce(-normal * Time.deltaTime * 2000 * normalGravityPercentage);
         rb.AddForce(Vector3.down * Time.deltaTime * 2000 * (1 - normalGravityPercentage));
@@ -250,8 +260,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
         if (!grounded)
         {
-            moveDir /= 3;
-            cross /= 3;
+            moveDir /= 1.5f;
+            cross /= 1.5f;
         }
 
         if (horizontalVelocity.sqrMagnitude <= maxSpeed * maxSpeed)
@@ -305,7 +315,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     private void SlideMovement()
     {
         if(grounded)
-            rb.velocity /= 1 + 12f * Time.deltaTime / rb.velocity.magnitude;
+            rb.velocity /= 1 + 18f * Time.deltaTime / rb.velocity.magnitude;
 
         rb.AddForce(Vector3.down * Time.deltaTime * 2000);
 

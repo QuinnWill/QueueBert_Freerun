@@ -138,7 +138,15 @@
                     "type": "Value",
                     "id": "0bc6d1b6-3bdf-4344-b112-270862c40469",
                     "expectedControlType": "Vector2",
-                    "processors": "StickDeadzone",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SwitchCamera",
+                    "type": "Button",
+                    "id": "2b6f9a2b-2e9b-4a2b-85e2-d43024ada0c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
                     "interactions": ""
                 }
             ],
@@ -151,6 +159,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "LookDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "16e2b488-2cba-4198-8e89-3eb727e3f7e7",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SwitchCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

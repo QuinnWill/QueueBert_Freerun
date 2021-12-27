@@ -8,6 +8,7 @@ public class AnimationManager : MonoBehaviour
     Rigidbody rb;
     RigidbodyCharacterMovement characterMovement;
 
+    private bool previousGrounded;
     private bool doDodge;
 
     private void OnEnable()
@@ -26,15 +27,16 @@ public class AnimationManager : MonoBehaviour
         rb = GetComponentInParent<Rigidbody>();
         characterMovement = GetComponentInParent<RigidbodyCharacterMovement>();
         doDodge = false;
+        previousGrounded = true;
     }
 
     
     void Update()
     {
         animator.applyRootMotion = animator.GetBool("IsInteracting");
-        animator.SetFloat("MoveSpeed", Mathf.Lerp(animator.GetFloat("MoveSpeed"), rb.velocity.magnitude, 0.1f));
+        animator.SetFloat("MoveSpeed", rb.velocity.magnitude);
         animator.SetFloat("VelocityY", rb.velocity.y);
-        if(characterMovement.stepsSinceLastGrounded > 2 || characterMovement.stepsSinceLastGrounded == 0)
+        if(characterMovement.grounded == previousGrounded)
             animator.SetBool("Grounded", characterMovement.grounded);
         animator.SetBool("WallRunning", characterMovement.isWallRunning);
         animator.SetBool("WallRunRight", Vector3.Cross(rb.velocity.normalized, characterMovement.normal).y < 0);
@@ -52,6 +54,9 @@ public class AnimationManager : MonoBehaviour
 
         if(!animator.GetBool("IsInteracting") && rb.velocity.sqrMagnitude > 4)
             SolveRotation();
+
+
+        previousGrounded = characterMovement.grounded;
     }
 
     private void SolveRotation()
@@ -63,7 +68,7 @@ public class AnimationManager : MonoBehaviour
 
         if (horizontalVelocity != Vector3.zero)
         {
-            Quaternion slerpRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(horizontalVelocity, Vector3.up), 0.1f);
+            Quaternion slerpRotation = Quaternion.Slerp(transform.localRotation, Quaternion.LookRotation(horizontalVelocity, Vector3.up), 10 * Time.deltaTime);
             transform.localRotation = slerpRotation;
         }
     }

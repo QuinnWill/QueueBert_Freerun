@@ -151,7 +151,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""0bc6d1b6-3bdf-4344-b112-270862c40469"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""StickDeadzone"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SwitchCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b6f9a2b-2e9b-4a2b-85e2-d43024ada0c9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
                     ""interactions"": """"
                 }
             ],
@@ -164,6 +172,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""LookDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16e2b488-2cba-4198-8e89-3eb727e3f7e7"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SwitchCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -225,6 +244,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_LookDelta = m_Camera.FindAction("LookDelta", throwIfNotFound: true);
+        m_Camera_SwitchCamera = m_Camera.FindAction("SwitchCamera", throwIfNotFound: true);
         // Actions
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_Dodge = m_Actions.FindAction("Dodge", throwIfNotFound: true);
@@ -335,11 +355,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Camera;
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_LookDelta;
+    private readonly InputAction m_Camera_SwitchCamera;
     public struct CameraActions
     {
         private @PlayerControls m_Wrapper;
         public CameraActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @LookDelta => m_Wrapper.m_Camera_LookDelta;
+        public InputAction @SwitchCamera => m_Wrapper.m_Camera_SwitchCamera;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -352,6 +374,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @LookDelta.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLookDelta;
                 @LookDelta.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLookDelta;
                 @LookDelta.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLookDelta;
+                @SwitchCamera.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnSwitchCamera;
+                @SwitchCamera.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnSwitchCamera;
+                @SwitchCamera.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnSwitchCamera;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -359,6 +384,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @LookDelta.started += instance.OnLookDelta;
                 @LookDelta.performed += instance.OnLookDelta;
                 @LookDelta.canceled += instance.OnLookDelta;
+                @SwitchCamera.started += instance.OnSwitchCamera;
+                @SwitchCamera.performed += instance.OnSwitchCamera;
+                @SwitchCamera.canceled += instance.OnSwitchCamera;
             }
         }
     }
@@ -415,6 +443,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     public interface ICameraActions
     {
         void OnLookDelta(InputAction.CallbackContext context);
+        void OnSwitchCamera(InputAction.CallbackContext context);
     }
     public interface IActionsActions
     {
