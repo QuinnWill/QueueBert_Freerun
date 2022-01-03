@@ -116,7 +116,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 jumpVel += normal * 20f * 0.5f;
                 jumpVel += Vector3.up * 20f * 0.8f;
                 
-                jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
+                jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 15f * 0.2f;
                 rb.velocity = jumpVel;
                 isWallRunning = false;
                 grounded = false;
@@ -148,7 +148,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
                 if (rb.velocity.sqrMagnitude > 79)
-                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 15f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -163,7 +163,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
         else
         {
 
-            SnapToGround();
+            //SnapToGround();
 
             if (!grounded)
             {
@@ -187,7 +187,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
                 if(rb.velocity.sqrMagnitude > 79)
-                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 20f * 0.2f;
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 15f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -334,20 +334,19 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                     normal = wallNormal;
                     return;
                 }
-
-                if (Mathf.Abs(wallNormal.y) < 0.4f)
+                else
                 {
                     Vector3 horizontalVelocity = previousVelocity - Vector3.up * previousVelocity.y;
                     float dot = Vector3.Dot(horizontalVelocity.normalized, wallNormal);
-                    if (dot < -0.1f)
+                    if (dot < -0.05f)
                     {
+                        Debug.Log("getting here");
                         normal = wallNormal.normalized;
                         isWallRunning = true;
                         Vector3 camForward = mainCamera.forward;
                         camForward.y = 0;
-                        dot = Vector3.Dot(camForward.normalized, normal);
+                        //dot = Vector3.Dot(camForward.normalized, normal);
 
-                        Debug.Log(dot < -0.8f);
                         if (dot > -0.8f)
                         {
                             Vector3 newVel = Vector3.ProjectOnPlane(previousVelocity, normal);
@@ -355,7 +354,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                             rb.velocity = newVel;
                         }
                         else
-                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (previousVelocity.y + ((Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 0.01f));
+                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (previousVelocity.y * 0.5f + (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 0.2f);
 
                     }
                 }
@@ -372,19 +371,22 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
         if (Mathf.Abs(rb.velocity.x) < 3f && Mathf.Abs(rb.velocity.z) < 3f && rb.velocity.y < -0.5f)
         {
+            //Debug.Log("Exit wallrun due to insufficient speed");
             return;
         }
 
         if (Physics.Raycast(rb.position, -lastNormal, out RaycastHit hit, probeDistance, layerMask))
         {
-            normal = hit.normal;
-            if (Mathf.Abs(hit.normal.y) > 0.3f)
+            if (Mathf.Abs(hit.normal.y) > 0.4f)
             {
+                //Debug.Log("Exit wallrun due to excess slope");
                 return;
             }
+            normal = hit.normal;
         }
         else
         {
+            //Debug.Log("Exit wallrun due to no wall");
             return;
         }
 
@@ -555,6 +557,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
             isSliding = true;
             doBoost = true;
         }
+        isWallRunning = false;
+        normal = Vector3.up;
         isCrouching = !isCrouching;
     }
 

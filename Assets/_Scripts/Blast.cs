@@ -10,36 +10,44 @@ public class Blast : MonoBehaviour
     public float maxForce;
     public float minForce;
     public float minRadius;
-    protected float fallOffRadius;
+    public float maxRadius;
+
+    public LayerMask layerMask;
+
+    public AnimationCurve fallOffCurve;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rigidbodies = FindObjectsOfType<Rigidbody>();
-        fallOffRadius = Mathf.Sqrt(maxForce / minForce) + minRadius;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Keyboard.current.rKey.isPressed)
-            DoBlast();
-    }
 
     public void DoBlast()
     {
         foreach (Rigidbody rb in rigidbodies)
         {
+            if (rb.gameObject == this.gameObject)
+                continue;
             float distance = Vector3.Distance(rb.position, transform.position);
-            if (distance < minRadius)
+            if (distance <= minRadius)
             {
+                rb.velocity -= rb.velocity.y * Vector3.up;
                 rb.AddForce((rb.position - transform.position).normalized * maxForce);
             }
-            else if (distance < fallOffRadius)
+            else if (distance < maxRadius)
             {
                 Debug.Log(rb.name);
-                rb.AddForce((rb.position - transform.position).normalized * maxForce / (distance - minRadius));
+                float fallOff = fallOffCurve.Evaluate((distance - minRadius) / maxRadius);
+                Vector3 force = rb.position - transform.position;
+                force.y *= 1.2f;
+                force = (force).normalized * maxForce * fallOff;
+                rb.velocity -= rb.velocity.y * Vector3.up;
+                rb.AddForce(force);
             }
         }
+
+        Destroy(this.gameObject);
     }
+
 }
