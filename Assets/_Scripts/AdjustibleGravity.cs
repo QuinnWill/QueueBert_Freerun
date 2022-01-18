@@ -17,7 +17,7 @@ public class AdjustibleGravity : MonoBehaviour
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         rb.AddForce(Vector3.down * gravity);
     }

@@ -33,6 +33,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.5, y: 0.39, z: -1}
   m_LocalScale: {x: 0.4, y: 0.2, z: 0.4}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -56,6 +57,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -113,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxForce: 1000
   minForce: 0
-  minRadius: 3
+  minRadius: 4
   maxRadius: 10
   layerMask:
     serializedVersion: 2
@@ -170,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1084fbffe43294fab840cfc245f5566a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 18
+  gravity: 14
 --- !u!114 &7234875500881537263
 MonoBehaviour:
   m_ObjectHideFlags: 0
