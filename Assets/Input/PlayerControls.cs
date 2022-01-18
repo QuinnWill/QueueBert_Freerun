@@ -199,6 +199,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ThrowObject"",
+                    ""type"": ""Button"",
+                    ""id"": ""adf12504-eb47-42f1-bb0b-65e5fcf65965"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -210,6 +218,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f87e2c5-61df-4359-81dd-1dc8f67d3b07"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ThrowObject"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -248,6 +267,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         // Actions
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_Dodge = m_Actions.FindAction("Dodge", throwIfNotFound: true);
+        m_Actions_ThrowObject = m_Actions.FindAction("ThrowObject", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -396,11 +416,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Actions;
     private IActionsActions m_ActionsActionsCallbackInterface;
     private readonly InputAction m_Actions_Dodge;
+    private readonly InputAction m_Actions_ThrowObject;
     public struct ActionsActions
     {
         private @PlayerControls m_Wrapper;
         public ActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Dodge => m_Wrapper.m_Actions_Dodge;
+        public InputAction @ThrowObject => m_Wrapper.m_Actions_ThrowObject;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -413,6 +435,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dodge.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnDodge;
                 @Dodge.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnDodge;
                 @Dodge.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnDodge;
+                @ThrowObject.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
+                @ThrowObject.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
+                @ThrowObject.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -420,6 +445,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dodge.started += instance.OnDodge;
                 @Dodge.performed += instance.OnDodge;
                 @Dodge.canceled += instance.OnDodge;
+                @ThrowObject.started += instance.OnThrowObject;
+                @ThrowObject.performed += instance.OnThrowObject;
+                @ThrowObject.canceled += instance.OnThrowObject;
             }
         }
     }
@@ -448,5 +476,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     public interface IActionsActions
     {
         void OnDodge(InputAction.CallbackContext context);
+        void OnThrowObject(InputAction.CallbackContext context);
     }
 }

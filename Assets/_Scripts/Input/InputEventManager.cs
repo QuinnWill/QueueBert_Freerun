@@ -18,6 +18,7 @@ public class InputEventManager : MonoBehaviour
     public static event Action crouchUp;
     public static event Action<Vector2> cameraDelta;
     public static event Action switchCamera;
+    public static event Action throwObject;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.started += _ => OnCrouchDown();
         controls.Movement.Crouch.canceled += _ => OnCrouchUp();
         controls.Actions.Dodge.performed += _ => OnDodge();
+        controls.Actions.ThrowObject.started += _ => OnThrowObject();
         controls.Camera.SwitchCamera.started += _ => OnSwitchCamera();
         //controls.Camera.LookDelta.performed += context => OnCameraMove(context.ReadValue<Vector2>());
 
@@ -54,6 +56,7 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.started -= _ => OnCrouchDown();
         controls.Movement.Crouch.canceled -= _ => OnCrouchUp();
         controls.Actions.Dodge.performed -= _ => OnDodge();
+        controls.Actions.ThrowObject.started -= _ => OnThrowObject();
         controls.Camera.SwitchCamera.started -= _ => OnSwitchCamera();
         //controls.Camera.LookDelta.performed -= context => OnCameraMove(context.ReadValue<Vector2>());
         controls.Disable();
@@ -96,6 +99,11 @@ public class InputEventManager : MonoBehaviour
     private void OnSwitchCamera()
     {
         switchCamera.Invoke();
+    }
+
+    private void OnThrowObject()
+    {
+        throwObject.Invoke();
     }
 
 
