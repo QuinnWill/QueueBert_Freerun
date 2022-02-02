@@ -18,6 +18,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private float maxSpeed;
 
+
+
     [HideInInspector]
     public int stepsSinceLastGrounded, stepsSinceLastWallRun, stepsSinceLastJump;
 
@@ -49,6 +51,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     public bool grounded;
     public bool isSprinting;
     public bool isWallRunning;
+    public bool isClimbing;
     public bool isCrouching;
     public bool isSliding;
 
@@ -90,11 +93,7 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
         IncrementSteps();
 
-        if (grounded && doBoost)
-        {
-            rb.AddForce(rb.velocity.normalized * 300);
-            doBoost = false;
-        }
+        
 
         if (isCrouching)
             maxSpeed = crouchSpeed;
@@ -103,7 +102,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
         else
             maxSpeed = runSpeed;
 
-        if (isWallRunning)
+        if (isClimbing)
+        { 
+            
+        }
+        else if (isWallRunning)
         {
 
             SnapToWall();
@@ -128,6 +131,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
         }
         else if(isSliding)
         {
+            if (grounded && doBoost)
+            {
+                rb.AddForce(rb.velocity.normalized * 300);
+                doBoost = false;
+            }
 
             //SnapToGround();
 
@@ -142,13 +150,13 @@ public class RigidbodyCharacterMovement : MonoBehaviour
             Quaternion slopeRotationMoving = Quaternion.FromToRotation(Vector3.up, normal);
             transform.rotation = Quaternion.Slerp(transform.rotation, slopeRotationMoving * camRotation, 10 * Time.deltaTime);
 
-            if (jump)
+            if (jump && grounded)
             {
                 Vector3 jumpVel = rb.velocity - Vector3.Dot(rb.velocity.normalized, normal) * normal * rb.velocity.magnitude;
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
                 if (rb.velocity.sqrMagnitude > 79)
-                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 15f * 0.2f;
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 10f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -162,6 +170,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
         }
         else
         {
+            if (grounded && doBoost)
+            {
+                rb.AddForce(rb.velocity.normalized * 300);
+                doBoost = false;
+            }
 
             //SnapToGround();
 
@@ -177,17 +190,13 @@ public class RigidbodyCharacterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, slopeRotationMoving * camRotation, 10 * Time.deltaTime);
 
 
-            GetComponentInChildren<Renderer>().material.SetColor(
-                "_Color", grounded ? Color.red : Color.white
-            );
-
-            if (jump)
+            if (jump && grounded)
             {
                 Vector3 jumpVel = rb.velocity - Vector3.Dot(rb.velocity.normalized, normal) * normal * rb.velocity.magnitude;
                 jumpVel += normal * 20f * 0.8f;
                 jumpVel += Vector3.up * 20f * 0.2f;
                 if(rb.velocity.sqrMagnitude > 79)
-                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 15f * 0.2f;
+                    jumpVel += (mainCamera.forward - Vector3.up * mainCamera.forward.y) * 10f * 0.2f;
                 rb.velocity = jumpVel;
                 grounded = false;
                 jump = false;
@@ -203,7 +212,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isWallRunning)
+        if (isClimbing)
+        { 
+            
+        }
+        else if (isWallRunning)
             WallRunMovement();
         else if (isSliding)
             SlideMovement();
@@ -340,7 +353,6 @@ public class RigidbodyCharacterMovement : MonoBehaviour
                     float dot = Vector3.Dot(horizontalVelocity.normalized, wallNormal);
                     if (dot < -0.05f)
                     {
-                        Debug.Log("getting here");
                         normal = wallNormal.normalized;
                         isWallRunning = true;
                         Vector3 camForward = mainCamera.forward;
@@ -413,46 +425,44 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     {
         if (true)
         {
-            if ((transform.GetChild(0) != collision.gameObject))
-            {
-                if (collision.contacts[0].normal.y >= 0.4f)
-                {
-                    isWallRunning = false;
-                    normal = Vector3.up;
-                }
-                Vector3 tempNormal = Vector3.zero;
-                float normalCount = 0;
-                for (int i = 0; i < collision.contactCount; i++)
-                {
-                    Vector3 newNormal = collision.contacts[i].normal.normalized;
-                    if (Vector3.Angle(normal, newNormal) < 50)
-                    {
-                        tempNormal += newNormal;
-                        normalCount++;
-                        grounded = true;
-                        cancelGrounded = false;
-                        CancelInvoke(nameof(StopGrounded));
-                    }
-                }
-                if (tempNormal != Vector3.zero)
-                {
-                    
-                    normal = tempNormal / normalCount;
-                }
 
-                float delay = 1f;
-                if (!cancelGrounded)
+            if (collision.contacts[0].normal.y >= 0.4f)
+            {
+                isWallRunning = false;
+                normal = Vector3.up;
+            }
+            Vector3 tempNormal = Vector3.zero;
+            float normalCount = 0;
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                Vector3 newNormal = collision.contacts[i].normal.normalized;
+                if (Vector3.Angle(normal, newNormal) < 50)
                 {
-                    cancelGrounded = true;
-                    Invoke(nameof(StopGrounded), Time.deltaTime * delay);
+                    tempNormal += newNormal;
+                    normalCount++;
+                        
                 }
+            }
+            if (tempNormal != Vector3.zero)
+            {
+                normal = tempNormal / normalCount;
+                grounded = true;
+                cancelGrounded = false;
+                CancelInvoke(nameof(StopGrounded));
+            }
+
+            float delay = 1f;
+            if (!cancelGrounded)
+            {
+                cancelGrounded = false;
+                Invoke(nameof(StopGrounded), Time.deltaTime * delay);
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!grounded)
+        if (!grounded && !isClimbing)
         {
             TryStartWallRun(collision);
         }
@@ -462,6 +472,11 @@ public class RigidbodyCharacterMovement : MonoBehaviour
     private void StopGrounded()
     {
         grounded = false;
+    }
+
+    private void CancelJump()
+    {
+        jump = false;
     }
 
     private void SnapToGround()
@@ -534,10 +549,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private void OnJumpInput()
     {
-        if (grounded || isWallRunning)
-        {
-            jump = true;
-        }
+        jump = true;
+        Invoke("CancelJump", 0.15f);
     }
 
     private void OnMoveInput(Vector2 input)

@@ -161,7 +161,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""LookDelta"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""0bc6d1b6-3bdf-4344-b112-270862c40469"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -184,7 +184,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""2482c641-581a-4944-84c9-e852807b9ba7"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=0.01,y=0.01)"",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""LookDelta"",
                     ""isComposite"": false,

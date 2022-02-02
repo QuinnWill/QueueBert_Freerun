@@ -11,7 +11,8 @@
                     "id": "93090ce5-ba9c-49f4-a4ac-435ed98883e6",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Jump",
@@ -19,7 +20,8 @@
                     "id": "81b714b5-5323-4642-91ba-9dc83ec5c979",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Sprint",
@@ -27,7 +29,8 @@
                     "id": "d8101b8e-03c7-4b52-9750-1b0172f75e92",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Crouch",
@@ -35,7 +38,8 @@
                     "id": "9aa92a36-e455-4870-a536-b4224296c9b0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -135,11 +139,12 @@
             "actions": [
                 {
                     "name": "LookDelta",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "0bc6d1b6-3bdf-4344-b112-270862c40469",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "SwitchCamera",
@@ -147,7 +152,8 @@
                     "id": "2b6f9a2b-2e9b-4a2b-85e2-d43024ada0c9",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,7 +162,7 @@
                     "id": "2482c641-581a-4944-84c9-e852807b9ba7",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.01,y=0.01)",
                     "groups": "Keyboard&Mouse",
                     "action": "LookDelta",
                     "isComposite": false,
@@ -185,7 +191,8 @@
                     "id": "0c1aec01-fdc0-4c41-9d5e-02a083d8976d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "ThrowObject",
@@ -193,7 +200,8 @@
                     "id": "adf12504-eb47-42f1-bb0b-65e5fcf65965",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

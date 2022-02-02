@@ -26,8 +26,8 @@ public class InputEventManager : MonoBehaviour
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
-
-        controls = new PlayerControls();
+        if (controls == null)
+            controls = new PlayerControls();
     }
 
     private void OnEnable()
@@ -64,46 +64,46 @@ public class InputEventManager : MonoBehaviour
 
     private void OnMove(Vector2 direction)
     {
-        move.Invoke(direction);
+        move?.Invoke(direction);
     }
 
     private void OnJump()
     {
-        jump.Invoke();
+        jump?.Invoke();
     }
 
     private void OnDodge()
     {
-        dodge.Invoke();
+        dodge?.Invoke();
     }
 
     private void OnSprint()
     {
-        sprint.Invoke();
+        sprint?.Invoke();
     }
     private void OnCrouchDown()
     {
-        crouchDown.Invoke();
+        crouchDown?.Invoke();
     }
 
     private void OnCrouchUp()
     {
-        crouchUp.Invoke();
+        crouchUp?.Invoke();
     }
 
     private void OnCameraMove(Vector2 delta)
     {
-        cameraDelta.Invoke(delta);
+        cameraDelta?.Invoke(delta);
     }
 
     private void OnSwitchCamera()
     {
-        switchCamera.Invoke();
+        switchCamera?.Invoke();
     }
 
     private void OnThrowObject()
     {
-        throwObject.Invoke();
+        throwObject?.Invoke();
     }
 
 

@@ -42,10 +42,10 @@ public class HitBoxEffects : MonoBehaviour
         if (tryUncrouch)
         {
             Debug.Log("trying to uncrouch");
-            Vector3 point1 = transform.position + (characterMovement.normal * 0.3f) + characterMovement.normal * (fullCollider.height / 2 - fullCollider.radius);
-            Vector3 point2 = transform.position + (characterMovement.normal * 0.3f) - characterMovement.normal * (fullCollider.height / 2 - fullCollider.radius);
+            Vector3 point1 = transform.position + (characterMovement.normal * 0.2f) + characterMovement.normal * (fullCollider.height / 2 - fullCollider.radius);
+            Vector3 point2 = transform.position + (characterMovement.normal * 0.2f) - characterMovement.normal * (fullCollider.height / 2 - fullCollider.radius);
             Debug.DrawLine(point1, point2, Color.green);
-            if (!Physics.CheckCapsule(point1, point2, fullCollider.radius, crouchMask))
+            if (!Physics.CheckCapsule(point1, point2, fullCollider.radius - 0.01f, crouchMask))
             {
                 Debug.Log("able to stand");
                 tryUncrouch = false;
@@ -74,4 +74,10 @@ public class HitBoxEffects : MonoBehaviour
     {
         tryUncrouch = true;
     }
+}
+
+enum HitboxStates
+{ 
+    crouching,
+    standing,
 }

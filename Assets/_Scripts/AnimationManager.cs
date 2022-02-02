@@ -28,12 +28,13 @@ public class AnimationManager : MonoBehaviour
         characterMovement = GetComponentInParent<RigidbodyCharacterMovement>();
         doDodge = false;
         previousGrounded = true;
+        animator.applyRootMotion = false;
     }
 
     
     void Update()
     {
-        animator.applyRootMotion = animator.GetBool("IsInteracting");
+        //animator.applyRootMotion = animator.GetBool("IsInteracting");
         animator.SetFloat("MoveSpeed", rb.velocity.magnitude);
         animator.SetFloat("VelocityY", rb.velocity.y);
         if(characterMovement.grounded == previousGrounded)
@@ -52,7 +53,7 @@ public class AnimationManager : MonoBehaviour
 
         
 
-        if(!animator.GetBool("IsInteracting") && rb.velocity.sqrMagnitude > 4)
+        if(!animator.GetBool("IsInteracting") && rb.velocity.sqrMagnitude > 4 && !characterMovement.isClimbing)
             SolveRotation();
 
 
@@ -78,10 +79,10 @@ public class AnimationManager : MonoBehaviour
         if (!animator.GetBool("IsInteracting"))
             return;
         Vector3 newVel = animator.deltaPosition;
-        Vector3 normal = characterMovement.normal;
+        /*Vector3 normal = characterMovement.normal;
         newVel.y = 0;
         float y = (normal.x * newVel.x + normal.z * newVel.z) / -normal.y;
-        newVel.y = y;
+        newVel.y = y;*/
         rb.velocity = newVel / Time.deltaTime;
     }
 
