@@ -29,7 +29,10 @@ public class SimpleTeleportRespawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-        other.attachedRigidbody.gameObject.transform.position = spawnPoint.position;
+        if (other.attachedRigidbody != null)
+        {
+            Debug.Log(other.name);
+            other.attachedRigidbody.gameObject.transform.position = spawnPoint.position;
+        }
     }
 }

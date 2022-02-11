@@ -224,6 +224,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSecondary"",
+                    ""type"": ""Button"",
+                    ""id"": ""bce70548-cef9-4e9b-8830-83b1dfb1c3b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UsePrimary"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c05b12b-181b-465d-ba1b-a76bf01a3ec1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -246,6 +264,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ThrowObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c604294-2db2-49c6-aca2-29ff32b9c985"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UseSecondary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f5bfd8d-7d12-4fb6-aabe-c415c819ecde"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UsePrimary"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -285,6 +325,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_Dodge = m_Actions.FindAction("Dodge", throwIfNotFound: true);
         m_Actions_ThrowObject = m_Actions.FindAction("ThrowObject", throwIfNotFound: true);
+        m_Actions_UseSecondary = m_Actions.FindAction("UseSecondary", throwIfNotFound: true);
+        m_Actions_UsePrimary = m_Actions.FindAction("UsePrimary", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -444,12 +486,16 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IActionsActions m_ActionsActionsCallbackInterface;
     private readonly InputAction m_Actions_Dodge;
     private readonly InputAction m_Actions_ThrowObject;
+    private readonly InputAction m_Actions_UseSecondary;
+    private readonly InputAction m_Actions_UsePrimary;
     public struct ActionsActions
     {
         private @PlayerControls m_Wrapper;
         public ActionsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Dodge => m_Wrapper.m_Actions_Dodge;
         public InputAction @ThrowObject => m_Wrapper.m_Actions_ThrowObject;
+        public InputAction @UseSecondary => m_Wrapper.m_Actions_UseSecondary;
+        public InputAction @UsePrimary => m_Wrapper.m_Actions_UsePrimary;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -465,6 +511,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ThrowObject.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
                 @ThrowObject.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
                 @ThrowObject.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnThrowObject;
+                @UseSecondary.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUseSecondary;
+                @UseSecondary.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUseSecondary;
+                @UseSecondary.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUseSecondary;
+                @UsePrimary.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUsePrimary;
+                @UsePrimary.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUsePrimary;
+                @UsePrimary.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnUsePrimary;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -475,6 +527,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ThrowObject.started += instance.OnThrowObject;
                 @ThrowObject.performed += instance.OnThrowObject;
                 @ThrowObject.canceled += instance.OnThrowObject;
+                @UseSecondary.started += instance.OnUseSecondary;
+                @UseSecondary.performed += instance.OnUseSecondary;
+                @UseSecondary.canceled += instance.OnUseSecondary;
+                @UsePrimary.started += instance.OnUsePrimary;
+                @UsePrimary.performed += instance.OnUsePrimary;
+                @UsePrimary.canceled += instance.OnUsePrimary;
             }
         }
     }
@@ -504,5 +562,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnDodge(InputAction.CallbackContext context);
         void OnThrowObject(InputAction.CallbackContext context);
+        void OnUseSecondary(InputAction.CallbackContext context);
+        void OnUsePrimary(InputAction.CallbackContext context);
     }
 }

@@ -49,7 +49,6 @@ public class StickToGround : MonoBehaviour
         Ray ray = new Ray(transform.position, -normal);
         if (collision.collider.Raycast(ray, out hitInfo, 1))
         {
-            Debug.Log(hitInfo.point);
             transform.position = hitInfo.point + normal * col.bounds.extents.y / 2;
         }
 

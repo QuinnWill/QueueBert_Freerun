@@ -19,6 +19,10 @@ public class InputEventManager : MonoBehaviour
     public static event Action<Vector2> cameraDelta;
     public static event Action switchCamera;
     public static event Action throwObject;
+    public static event Action OnPrimaryStart;
+    public static event Action OnSecondaryStart;
+    public static event Action onPrimaryEnd;
+    public static event Action onSecondaryEnd;
 
     void Awake()
     {
@@ -41,6 +45,10 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.canceled += _ => OnCrouchUp();
         controls.Actions.Dodge.performed += _ => OnDodge();
         controls.Actions.ThrowObject.started += _ => OnThrowObject();
+        controls.Actions.UsePrimary.started += _ => OnPrimaryUse();
+        controls.Actions.UseSecondary.started += _ => OnSecondaryUse();
+        controls.Actions.UsePrimary.canceled += _ => OnPrimaryEnd();
+        controls.Actions.UseSecondary.canceled += _ => OnSecondaryEnd();
         controls.Camera.SwitchCamera.started += _ => OnSwitchCamera();
         //controls.Camera.LookDelta.performed += context => OnCameraMove(context.ReadValue<Vector2>());
 
@@ -57,6 +65,10 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.canceled -= _ => OnCrouchUp();
         controls.Actions.Dodge.performed -= _ => OnDodge();
         controls.Actions.ThrowObject.started -= _ => OnThrowObject();
+        controls.Actions.UsePrimary.started -= _ => OnPrimaryUse();
+        controls.Actions.UseSecondary.started -= _ => OnSecondaryUse();
+        controls.Actions.UsePrimary.canceled -= _ => OnPrimaryEnd();
+        controls.Actions.UseSecondary.canceled -= _ => OnSecondaryEnd();
         controls.Camera.SwitchCamera.started -= _ => OnSwitchCamera();
         //controls.Camera.LookDelta.performed -= context => OnCameraMove(context.ReadValue<Vector2>());
         controls.Disable();
@@ -104,6 +116,26 @@ public class InputEventManager : MonoBehaviour
     private void OnThrowObject()
     {
         throwObject?.Invoke();
+    }
+
+    private void OnPrimaryUse()
+    {
+        OnPrimaryStart?.Invoke();
+    }
+
+    private void OnSecondaryUse()
+    {
+        OnSecondaryStart?.Invoke();
+    }
+
+    private void OnPrimaryEnd()
+    {
+        onPrimaryEnd?.Invoke();
+    }
+
+    private void OnSecondaryEnd()
+    {
+        onSecondaryEnd?.Invoke();
     }
 
 

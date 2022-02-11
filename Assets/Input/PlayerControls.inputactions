@@ -202,6 +202,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UseSecondary",
+                    "type": "Button",
+                    "id": "bce70548-cef9-4e9b-8830-83b1dfb1c3b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UsePrimary",
+                    "type": "Button",
+                    "id": "6c05b12b-181b-465d-ba1b-a76bf01a3ec1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -224,6 +242,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ThrowObject",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c604294-2db2-49c6-aca2-29ff32b9c985",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UseSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f5bfd8d-7d12-4fb6-aabe-c415c819ecde",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UsePrimary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

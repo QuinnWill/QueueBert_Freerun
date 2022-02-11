@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bcc43ba7f69d4ab98c76c24533c77d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxForce: 1000
+  maxForce: 500
   minForce: 0
   minRadius: 4
   maxRadius: 10

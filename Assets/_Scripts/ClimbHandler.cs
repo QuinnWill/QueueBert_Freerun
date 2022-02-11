@@ -74,13 +74,13 @@ public class ClimbHandler : MonoBehaviour
             Vector3 hangPosition = transform.position;
             hangPosition.y = climbObject.transform.position.y;
 
-            hangPosition = climbObject.ClosestPoint(hangPosition);
-
             RaycastHit hitInfo;
 
             Vector3 normal = climbObject.transform.forward;
 
-            if (Physics.Raycast(hangPosition, climbObject.transform.position - hangPosition, out hitInfo))
+            Ray ray = new Ray(hangPosition, climbObject.transform.position - hangPosition);
+
+            if (climbObject.Raycast(ray, out hitInfo, 2))
             {
                 Debug.Log("normal on climbable: " + hitInfo.normal);
                 normal = hitInfo.normal;
@@ -92,21 +92,21 @@ public class ClimbHandler : MonoBehaviour
 
             rb.AddForce(Vector3.Dot(normal, Camera.main.transform.forward) * climbRight * moveInput.x * 10 * climbSpeed);
 
-            float bodyPosition = climbObject.transform.position.y - hangOffset;
+            float bodyOffset = climbObject.transform.position.y - hangOffset;
 
             Vector3 bodyPos = rb.position;
 
             if (moveInput.y > 0)
             {
-                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyPosition + hangHeight, hangSpeed / 20);
+                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyOffset + hangHeight, hangSpeed / 20);
             }
             else if (moveInput.y < 0)
             {
-                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyPosition - hangHeight / 2, hangSpeed / 20);
+                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyOffset - hangHeight / 2, hangSpeed / 20);
             }
             else
             {
-                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyPosition, hangSpeed / 40);
+                bodyPos.y = Mathf.Lerp(bodyPos.y, bodyOffset, hangSpeed / 40);
             }
 
             rb.position = bodyPos;
@@ -121,7 +121,7 @@ public class ClimbHandler : MonoBehaviour
             if (rb.velocity.y < 0.5f && canClimb && !isClimbing)
             {
                 isClimbing = true;
-                animator.SetBool("IsClimbing", true);
+                //animator.SetBool("IsClimbing", true);
                 rb.velocity = Vector3.zero;
                 playerMovement.isClimbing = true;
                 //playerMovement.enabled = false;
@@ -137,7 +137,9 @@ public class ClimbHandler : MonoBehaviour
 
                 Vector3 normal = climbObject.transform.forward;
 
-                if (Physics.Raycast(hangPosition, climbObject.transform.position - hangPosition, out hitInfo))
+                Ray ray = new Ray(hangPosition, climbObject.transform.position - hangPosition);
+
+                if (climbObject.Raycast(ray, out hitInfo, 1))
                 {
                     Debug.Log("normal on climbable: " + hitInfo.normal);
                     normal = hitInfo.normal;
@@ -194,12 +196,12 @@ public class ClimbHandler : MonoBehaviour
         }
     }
 
-    private void StopClimbing()
+    public void StopClimbing()
     {
         if (isClimbing)
         {
             isClimbing = false;
-            animator.SetBool("IsClimbing", false);
+            //animator.SetBool("IsClimbing", false);
             playerMovement.isClimbing = false;
             climbObject = null;
             canClimb = false;
