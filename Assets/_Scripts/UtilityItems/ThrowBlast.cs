@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
-public class ThrowBlast : MonoBehaviour
+public class ThrowBlast : UsableItem
 {
+
+    public static event Action sendBlast;
 
     public GameObject blast;
 
@@ -14,35 +17,24 @@ public class ThrowBlast : MonoBehaviour
 
     public Collider[] ignoredColliders;
 
-    Blast current;
+    private GameObject current;
 
     Rigidbody parentRb;
 
-    Transform camera;
+    Transform currentCamera;
 
-    private void OnEnable()
-    {
-        InputEventManager.throwObject += throwBlast;
-    }
-
-    private void OnDisable()
-    {
-        InputEventManager.throwObject -= throwBlast;
-    }
-
-    void Start()
+    protected void Start()
     {
         parentRb = GetComponentInParent<Rigidbody>();
-        camera = Camera.main.transform;
+        currentCamera = Camera.main.transform;
     }
 
-    private void throwBlast()
+    private void throwObject()
     {
         if (current == null)
         {
-            GameObject currentBlast = Instantiate(blast, transform.position, transform.rotation);
-            Rigidbody blastRb = currentBlast.GetComponent<Rigidbody>();
-            current = currentBlast.GetComponent<Blast>();
+            current = Instantiate(blast, transform.position, transform.rotation);
+            Rigidbody blastRb = current.GetComponent<Rigidbody>();
             Collider colliderCurrent = current.GetComponent<Collider>();
             foreach (Collider collider in ignoredColliders)
             {
@@ -50,14 +42,28 @@ public class ThrowBlast : MonoBehaviour
             }
             
             blastRb.velocity = parentRb.velocity;
-            blastRb.AddForce(camera.forward * throwForce * 10);
+            blastRb.AddForce(currentCamera.forward * throwForce * 10);
 
-            float rand = Random.value;
+            float rand = UnityEngine.Random.value;
 
             blastRb.AddTorque(Vector3.up * rotationalForce * rand);
             blastRb.AddTorque(Vector3.right * rotationalForce * rand);
         }
-        else
-            current.DoBlast();
+
+    }
+
+    protected override void DoAction()
+    {
+        if (current != null)
+        {
+            sendBlast.Invoke();
+            return;
+        }
+        if (uses <= 0 && limitUses)
+        {
+            return;
+        }
+        uses--;
+        throwObject();
     }
 }

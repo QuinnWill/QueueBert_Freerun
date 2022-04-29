@@ -18,6 +18,8 @@ public class RigidbodyCharacterMovement : MonoBehaviour
 
     private float maxSpeed;
 
+    private Vector3 previousWallNormal;
+
 
 
     [HideInInspector]
@@ -341,33 +343,36 @@ public class RigidbodyCharacterMovement : MonoBehaviour
             for (int i = 0; i < collision.contactCount; i++)
             {
                 Vector3 wallNormal = collision.contacts[i].normal;
-                if (Mathf.Abs(wallNormal.y) > 0.4f)
+                if (wallNormal != previousNormal)
                 {
-                    isWallRunning = false;
-                    normal = wallNormal;
-                    return;
-                }
-                else
-                {
-                    Vector3 horizontalVelocity = previousVelocity - Vector3.up * previousVelocity.y;
-                    float dot = Vector3.Dot(horizontalVelocity.normalized, wallNormal);
-                    if (dot < -0.05f)
+                    if (Mathf.Abs(wallNormal.y) > 0.4f)
                     {
-                        normal = wallNormal.normalized;
-                        isWallRunning = true;
-                        Vector3 camForward = mainCamera.forward;
-                        camForward.y = 0;
-                        //dot = Vector3.Dot(camForward.normalized, normal);
-
-                        if (dot > -0.8f)
+                        isWallRunning = false;
+                        normal = wallNormal;
+                        return;
+                    }
+                    else
+                    {
+                        Vector3 horizontalVelocity = previousVelocity - Vector3.up * previousVelocity.y;
+                        float dot = Vector3.Dot(horizontalVelocity.normalized, wallNormal);
+                        if (dot < -0.05f)
                         {
-                            Vector3 newVel = Vector3.ProjectOnPlane(previousVelocity, normal);
-                            newVel.y /= 1.5f;
-                            rb.velocity = newVel;
-                        }
-                        else
-                            rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (previousVelocity.y * 0.5f + (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 0.2f);
+                            normal = wallNormal.normalized;
+                            previousNormal = wallNormal;
+                            isWallRunning = true;
+                            Vector3 camForward = mainCamera.forward;
+                            camForward.y = 0;
 
+                            if (dot > -0.8f)
+                            {
+                                Vector3 newVel = Vector3.ProjectOnPlane(previousVelocity, normal);
+                                newVel.y /= 1.5f;
+                                rb.velocity = newVel;
+                            }
+                            else
+                                rb.velocity = Vector3.ProjectOnPlane(Vector3.up, normal).normalized * (previousVelocity.y * 0.5f + (Mathf.Abs(previousVelocity.x) + Mathf.Abs(previousVelocity.z)) * 0.2f);
+
+                        }
                     }
                 }
             }

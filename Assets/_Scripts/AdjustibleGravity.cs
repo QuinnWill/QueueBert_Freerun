@@ -19,6 +19,10 @@ public class AdjustibleGravity : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(Vector3.down * gravity);
+        rb.AddForce(Vector3.down * gravity * Time.deltaTime * 10);
+
+        float velocityY = rb.velocity.y;
+
+        rb.velocity = new Vector3(rb.velocity.x / 1.02f, velocityY, rb.velocity.z / 1.02f);
     }
 }

@@ -21,6 +21,16 @@ public class Blast : MonoBehaviour
         rigidbodies = new List<Rigidbody>();
     }
 
+    private void OnEnable()
+    {
+        ThrowBlast.sendBlast += DoBlast;
+    }
+
+    private void OnDisable()
+    {
+        ThrowBlast.sendBlast -= DoBlast;
+    }
+
     public void DoBlast()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, maxRadius);
@@ -61,7 +71,7 @@ public class Blast : MonoBehaviour
             {
                 rb.velocity -= rb.velocity.y / 2 * Vector3.up;
                 Vector3 force = (rb.position - transform.position).normalized;
-                force.y *= 1.5f;
+                force.y *= 1.7f;
                 force.Normalize();
                 rb.AddForce(force * maxForce);
             }
@@ -70,7 +80,7 @@ public class Blast : MonoBehaviour
                 Debug.Log(rb.name);
                 float fallOff = fallOffCurve.Evaluate((distance - minRadius) / maxRadius);
                 Vector3 force = rb.position - transform.position;
-                force.y *= 1.5f;
+                force.y *= 1.7f;
                 force = (force).normalized * maxForce * fallOff;
                 rb.velocity -= rb.velocity.y / 2 * Vector3.up;
                 rb.AddForce(force);

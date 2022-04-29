@@ -90,7 +90,7 @@ public class ClimbHandler : MonoBehaviour
 
             rb.velocity /= 1.5f;
 
-            rb.AddForce(Vector3.Dot(normal, Camera.main.transform.forward) * climbRight * moveInput.x * 10 * climbSpeed);
+            rb.AddForce((Vector3.Dot(normal, Camera.main.transform.forward) * climbRight * moveInput.x * 10 * climbSpeed));
 
             float bodyOffset = climbObject.transform.position.y - hangOffset;
 

@@ -8,7 +8,7 @@ public class InputEventManager : MonoBehaviour
 
     public static InputEventManager instance;
 
-    private PlayerControls controls;
+    public PlayerControls controls;
 
     public static event Action<Vector2> move;
     public static event Action jump;
@@ -18,11 +18,12 @@ public class InputEventManager : MonoBehaviour
     public static event Action crouchUp;
     public static event Action<Vector2> cameraDelta;
     public static event Action switchCamera;
-    public static event Action throwObject;
-    public static event Action OnPrimaryStart;
-    public static event Action OnSecondaryStart;
-    public static event Action onPrimaryEnd;
-    public static event Action onSecondaryEnd;
+    public static event Action primaryStart;
+    public static event Action secondaryStart;
+    public static event Action primaryEnd;
+    public static event Action SecondaryEnd;
+    public static event Action<bool> selectItemStart;
+    public static event Action<bool> selectItemEnd;
 
     void Awake()
     {
@@ -44,13 +45,16 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.started += _ => OnCrouchDown();
         controls.Movement.Crouch.canceled += _ => OnCrouchUp();
         controls.Actions.Dodge.performed += _ => OnDodge();
-        controls.Actions.ThrowObject.started += _ => OnThrowObject();
         controls.Actions.UsePrimary.started += _ => OnPrimaryUse();
         controls.Actions.UseSecondary.started += _ => OnSecondaryUse();
         controls.Actions.UsePrimary.canceled += _ => OnPrimaryEnd();
         controls.Actions.UseSecondary.canceled += _ => OnSecondaryEnd();
+        controls.Actions.SelectPrimary.started += _ => OnSelectPrimaryStart();
+        controls.Actions.SelectPrimary.canceled += _ => OnSelectPrimaryEnd();
+        controls.Actions.SelectSecondary.started += _ => OnSelectSecondaryStart();
+        controls.Actions.SelectSecondary.canceled += _ => OnSelectSecondaryEnd();
         controls.Camera.SwitchCamera.started += _ => OnSwitchCamera();
-        //controls.Camera.LookDelta.performed += context => OnCameraMove(context.ReadValue<Vector2>());
+        controls.Camera.LookDelta.performed += context => OnCameraMove(context.ReadValue<Vector2>());
 
     }
 
@@ -64,13 +68,16 @@ public class InputEventManager : MonoBehaviour
         controls.Movement.Crouch.started -= _ => OnCrouchDown();
         controls.Movement.Crouch.canceled -= _ => OnCrouchUp();
         controls.Actions.Dodge.performed -= _ => OnDodge();
-        controls.Actions.ThrowObject.started -= _ => OnThrowObject();
         controls.Actions.UsePrimary.started -= _ => OnPrimaryUse();
         controls.Actions.UseSecondary.started -= _ => OnSecondaryUse();
         controls.Actions.UsePrimary.canceled -= _ => OnPrimaryEnd();
         controls.Actions.UseSecondary.canceled -= _ => OnSecondaryEnd();
+        controls.Actions.SelectPrimary.started -= _ => OnSelectPrimaryStart();
+        controls.Actions.SelectPrimary.canceled -= _ => OnSelectPrimaryEnd();
+        controls.Actions.SelectSecondary.started -= _ => OnSelectSecondaryStart();
+        controls.Actions.SelectSecondary.canceled -= _ => OnSelectSecondaryEnd();
         controls.Camera.SwitchCamera.started -= _ => OnSwitchCamera();
-        //controls.Camera.LookDelta.performed -= context => OnCameraMove(context.ReadValue<Vector2>());
+        controls.Camera.LookDelta.performed -= context => OnCameraMove(context.ReadValue<Vector2>());
         controls.Disable();
     }
 
@@ -113,29 +120,44 @@ public class InputEventManager : MonoBehaviour
         switchCamera?.Invoke();
     }
 
-    private void OnThrowObject()
-    {
-        throwObject?.Invoke();
-    }
-
     private void OnPrimaryUse()
     {
-        OnPrimaryStart?.Invoke();
+        primaryStart?.Invoke();
     }
 
     private void OnSecondaryUse()
     {
-        OnSecondaryStart?.Invoke();
+        secondaryStart?.Invoke();
     }
 
     private void OnPrimaryEnd()
     {
-        onPrimaryEnd?.Invoke();
+        primaryEnd?.Invoke();
     }
 
     private void OnSecondaryEnd()
     {
-        onSecondaryEnd?.Invoke();
+        SecondaryEnd?.Invoke();
+    }
+
+    private void OnSelectPrimaryStart()
+    {
+        selectItemStart.Invoke(true);
+    }
+
+    private void OnSelectPrimaryEnd()
+    {
+        selectItemEnd?.Invoke(true);
+    }
+
+    private void OnSelectSecondaryStart()
+    {
+        selectItemStart?.Invoke(false);
+    }
+
+    private void OnSelectSecondaryEnd()
+    {
+        selectItemEnd?.Invoke(false);
     }
 
 

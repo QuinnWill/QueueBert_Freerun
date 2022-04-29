@@ -195,9 +195,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ThrowObject",
+                    "name": "UsePrimary",
                     "type": "Button",
-                    "id": "adf12504-eb47-42f1-bb0b-65e5fcf65965",
+                    "id": "6c05b12b-181b-465d-ba1b-a76bf01a3ec1",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -213,9 +213,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UsePrimary",
+                    "name": "SelectPrimary",
                     "type": "Button",
-                    "id": "6c05b12b-181b-465d-ba1b-a76bf01a3ec1",
+                    "id": "b0d499ef-5415-44d8-a305-87236ab0f21f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectSecondary",
+                    "type": "Button",
+                    "id": "de3b3f9b-0289-488b-a621-667abc44a49a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -236,23 +245,34 @@
                 },
                 {
                     "name": "",
-                    "id": "9f87e2c5-61df-4359-81dd-1dc8f67d3b07",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "ThrowObject",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4c604294-2db2-49c6-aca2-29ff32b9c985",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "UseSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e186e38b-fc26-4b4f-8413-2a0dc558d01b",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectPrimary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afdbe1f4-ed1e-4242-bcde-17d35bdd8a6d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectSecondary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
